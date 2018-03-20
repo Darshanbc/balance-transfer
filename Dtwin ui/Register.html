@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>  <title>Signup.html</title></head>
+<body>
+<meta charset="utf-8"/>
+<h2>Blockchain Demo</h2>
+
+<!--=================================-create User================================= -->
+<div style="float:left; width:35%">
+    <div>
+     <table>
+      <tr>
+        <th>Signup</th>
+        
+      </tr>
+      <tr>
+        <td>Organisation</td>
+        <!-- <td><input type="Text"   id="org" value ="" /><td> -->
+      <td> 
+        <select id="org" >
+        <option value="Org1">org1</option>
+        <option value="Org2">org2</option>
+        </select>
+      </td>
+      </tr>
+      <tr>
+        <td>User Id</td>
+        <td><input type="Text"   id="userId" value ="" /><td>
+
+      </tr>
+      <tr>
+        <td>Password</td>
+        <td><input type="Password"   id="pwd" value ="" /><td>
+</tr>
+       <tr>
+        <td>Role</td>
+        <!-- <td>  <input type="Text"  id="role" value ="" /></td> -->
+        <td> 
+        <select id="role" >
+        <option value="User">User</option>
+        <option value="Admin">Administrator</option>
+        <option value="Network Admin">Network Administrator</option>
+        <option value="Manager">Manager</option>
+        </select>
+      </td>
+      </tr>
+      </tr>
+       <tr>
+        <td>First Name</td>
+        <td>  <input type="Text"  id="fname" value ="" /></td>
+        
+      </tr>
+      <tr>
+        <td>Last Name</td>
+        <td>  <input type="Text"  id="lname" value ="" /></td>
+        
+      </tr>
+      <tr>
+        <td>Age</td>
+        <td>  <input type="Text"  id="age" value ="" /></td>
+        
+      </tr>
+      <tr>
+        <td>E-mail</td>
+        <td>  <input type="Text"  id="email" value ="" /></td>
+        
+      </tr>
+      <tr>
+        <td><button type="button" onclick="createUser()">Register User</button>
+    </td>
+        
+      </tr>
+    </table>
+    </div>
+    <p id="enrollUser"></p> 
+
+    <p id="userTransactionId"></p> 
+    </td>
+    <!--=================================create User end=================================- -->
+
+   
+<!-- =================================Map car Ends================================= -->
+
+ 
+<script>
+
+//---------------------------------Create User--------------------
+function createUser() {
+  var xhttp = new XMLHttpRequest();
+  var xhr = new XMLHttpRequest();
+
+  var userId=document.getElementById("userId").value;
+  var FirstName=document.getElementById("fname").value;
+  var lastName=document.getElementById("lname").value
+  var age=document.getElementById("age").value;
+  var email=document.getElementById("email").value;
+  var org=document.getElementById("org").value;
+  var pwd=document.getElementById("pwd").value; 
+  var role=document.getElementById("role").value; 
+  	xhttp.onreadystatechange = function() {  
+      	var message=JSON.parse(this.responseText);
+     	//document.getElementById("enrollUser").innerHTML = "Success: "+message["success"];
+      	localStorage.setItem("token", message["token"]);        
+		another()
+  	};
+  
+  xhttp.open("POST", "http://localhost:4000/users", true);
+  xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+  xhttp.send( "orgName="+org+"&username="+userId+"&role="+role+"&secret="+pwd);
+function another(){
+	//send another request
+	xhr.open("POST", "http://localhost:4000/channels/mychannel/chaincodes/dtwin", true);
+	var obj={	
+			"fcn":"newuser",
+			"args":[FirstName,lastName,age,email]
+		}
+	var data=JSON.stringify(obj);
+
+	xhr.setRequestHeader("Content-Type", "application/json");
+	xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem("token"));
+	xhr.send(data)
+	xhr.onreadystatechange = function() {  
+	document.getElementById("userTransactionId").innerHTML ="transaction Id: "+xhr.responseText;
+
+  };
+}
+}
+//-------------------------------Create User ends---------------------------------
+
+</script>
+</body>
+</html>

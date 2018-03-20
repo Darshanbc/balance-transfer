@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>switch.html</title>
+</head>
+<body>
+
+<p>Click the button to Operate the Smart Switch</p>
+
+<input type ="button" onclick="myFunction()" value ="ON" id="switch"></button>
+
+
+ <table>
+    <tr>
+						<td>UserId</td>
+						<td><input id="userId" type="Text"></td>
+					</tr>
+
+					<tr>
+						<td>Org</td>
+						<td> 
+							<select id="org" >
+							<option value="Org1">org1</option>
+							<option value="Org2">org2</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						
+						<td><input value="Load User" id="org" type="button" onclick="loadUser()"></td>
+					</tr></table>
+
+
+<p id="userTransactionId"></p>
+<script>
+
+function myFunction() {
+	var TxId=localStorage.getItem("occupiedTxID")
+	var org=document.getElementById("org").value
+    var status=document.getElementById("switch").value
+     
+
+    var res=status.localeCompare("ON")
+    if(res==0){
+    document.getElementById("switch").value ="OFF" ;
+    }
+    else{
+     document.getElementById("switch").value ="ON" ;
+    }
+	var uri="http://localhost:4000/channels/mychannel/chaincodes/dtwin/"+TxId+"?permission="+status+"&targets=%7B%0A%22set1%22%3A%7B%22org%22%3A%22"+org+"%22%2C%22peers%22%3A%5B%22peer2%22%2C%22peer1%22%5D%7D%0A%20%20%7D&peer=peer0."+org.toLowerCase()+".example.com&fcn=switching"
+    var xhr = new XMLHttpRequest();
+   xhr.onreadystatechange = function() {  
+      var message=JSON.parse(this.responseText);
+      document.getElementById("userTransactionId").innerHTML = "Transaction Id :"+message.Transaction_Id//this.responseText;
+    }
+   xhr.open("GET", uri, true);
+   xhr.setRequestHeader("Content-Type", "application/json");
+   xhr.setRequestHeader('Authorization', 'Bearer ' + 
+   localStorage.getItem("token"));
+   xhr.send();
+    
+}
+
+function loadUser(){
+    var xhttp = new XMLHttpRequest();
+    var userId=document.getElementById("userId").value
+    var org=document.getElementById("org").value
+    xhttp.onreadystatechange = function() {
+      var message=JSON.parse(this.responseText);
+      localStorage.setItem("token", message["token"]);
+    };
+    
+    xhttp.open("POST", "http://localhost:4000/users", true);
+    xhttp.setRequestHeader('Content-type',
+        'application/x-www-form-urlencoded');
+    xhttp.send("orgName=" + org + "&username=" + userId
+        + "&role=user&secret=\"\"" );
+  }
+
+</script>
+
+</body>
+</html>
+

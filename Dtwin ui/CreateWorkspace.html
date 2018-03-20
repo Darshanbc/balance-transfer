@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html><head>
+<style>
+div.relative {
+	position: relative;
+	top: 0px;
+	left: 0px;
+	border: 3px solid #73AD21;
+}
+
+td {
+
+}
+
+input[type="text"] {
+	width: 100%;
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+}
+
+#wrap {
+	width: 230px;
+	height: 220px;
+}
+
+#div1 {
+	display: inline-block;
+	position: absolute;
+	padding: 0px;
+	margin: 0px;
+	transition: height .5s, width .5s;
+	z-index: 1;
+		border: 1px solid black;
+}
+
+#div1:Hover {
+	width: 200px;
+	height: 200px;
+}
+
+#div2 {
+	display: inline-block;
+	position: absolute;
+	padding: 0px;
+	margin: 0px;
+		border: 1px solid black;
+}
+
+#div3 {
+	display: inline-block;
+	position: absolute;
+	padding: 0px;
+	margin: 0px;
+		border: 1px solid black;
+}
+
+#div4 {
+	display: inline-block;
+	position: absolute;
+	padding: 0px;
+	margin: 0px;
+		border: 1px solid black;
+}
+</style>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+</head>
+<body>
+	<meta charset="utf-8">
+	  <title>Create_Workspace.html</title>
+	<h2 style="height: 30px;">Create Work-Space</h2>
+	<table style="width: 550px; left: 20px; margin-left: 12px;">
+		<tbody>
+			<tr>
+				<td><h4>WorkspaceType</h4>
+					<h4></h4></td>
+				<td><input name="wstype" onclick="settype(this.value)" value="cubicle" type="radio">Cubicle</td>
+				<td><input name="wstype" onclick="settype(this.value)" value="Room" type="radio">Room</td>
+				<td><input name="wstype" onclick="settype(this.value)" value="ConfRoom" type="radio">Conference Room</td>
+
+			</tr>
+		</tbody>
+	</table>
+
+
+
+	<div id="wrap" style="width: 500px; height: 500px;">
+		<div id="div1" style="width: 450px;  top: 150px;height: 300px;">
+			<p></p>
+			<table>
+				<tbody>
+					<tr>
+						<th>Physical Location</th>
+					</tr>
+
+					<tr>
+						<td>Country</td>
+						<td><input id="country" type="Text"></td>
+					</tr>
+
+					<tr>
+						<td>City</td>
+						<td><input id="city" type="Text"></td>
+					</tr>
+
+					<tr>
+						<td>Building Name</td>
+						<td><input id="BuildingName" type="text"></td>
+					</tr>
+
+					<tr>
+						<td>Floor</td>
+						<td><input id="floor" type="Text"></td>
+					</tr>
+
+
+					<tr>
+						<td>Wing</td>
+						<td><input id="wing" type="Text"></td>
+					</tr>
+
+					<tr>
+						<td>Workspace-Name</td>
+						<td><input id="wspaceName" type="Text"></td>
+					</tr>
+
+
+
+				</tbody>
+			</table>
+			<p></p>
+		</div>
+
+
+		<div id="div2" style="height: 300px; left: 480px; top: 150px; width: 450px;">
+			<h4>Electrical Switches</h4>
+
+			<table id="switchTable" style="table-layout: fixed" width="250">
+				<tbody>
+					<tr>
+						<td style="width: 80px;" width="">Switch ID</td>
+						<td style="width: 150px;" width="">Assigned to</td>
+						<td style="width: 70px;" width="">Status</td>
+					</tr>
+					<tr>
+						<td><input id="switchId1" type="text"></td>
+						<td><input id="assignTo1" type="text"></td>
+						<td><input id="status1" type="text"></td>
+					</tr>
+				</tbody>
+			</table>
+			<input value="Add Row" onclick="addRow('switchTable')" type="button">
+
+			<input value="Delete Row" onclick="deleteRow('switchTable')" type="button">
+		</div>
+		<div id="div3" style="width: 450px; height: 300px; top: 460px;">
+			<p></p>
+			<h4>Furnitures</h4>
+			<table id="furnTable" style="table-layout: fixed" width="250">
+				<thead></thead>
+				<tbody>
+					<tr>
+						<td style="width: 150px;" width="">Name</td>
+						<td style="width: 70px; height: 28px;" width="">Quantity</td>
+					</tr>
+					<tr>
+						<td><input id="fname1" type="text"></td>
+						<td><input id="fquantity1" type="text"></td>
+					</tr>
+				</tbody>
+			</table>
+			<input value="Add Row" onclick="addRow('furnTable')" type="button">
+
+			<input value="Delete Row" onclick="deleteRow('furnTable')" type="button">
+		</div>
+		<div id="div4" style="top: 460px; width: 450px; height: 300px; left: 480px;">
+	
+			<p>Network Port Details</p>
+			<div style="width: 200px; position: absolute">
+				<table id="teleportTable" style="table-layout: fixed">
+					<thead></thead>
+					<tbody>
+						<tr>
+							<td style="width: 150px;" width="">Ext Number</td>
+						</tr>
+						<tr>
+							<td><input id="teleport1" type="text"></td>
+						</tr>
+					</tbody>
+				</table>
+				<!-- <input value="Add Row" onclick="addRow('teleportTable')" type="button">
+
+				<input value="Delete Row" onclick="deleteRow('teleportTable')" type="button"> -->
+			</div>
+			<div style="width: 200px; position: absolute; left: 190px">
+				<table id="IpportTable" style="table-layout: fixed">
+					<thead></thead>
+					<tbody>
+						<tr>
+							<td style="width: 150px;" width="">Ip-Ports</td>
+						</tr>
+						
+					<tr><td><input id="ipports1" type="text"></td></tr></tbody>
+				</table>
+				<input value="Add Row" onclick="addRow('IpportTable')" type="button">
+
+				<input value="Delete Row" onclick="deleteRow('IpportTable')" type="button">
+			</div>
+		</div>
+	</div>
+
+
+	<div style="width: 413px"></div>
+<br>
+<br><br><br><br><br><br><input value="Submit" onclick="createWsPace()" type="button"><br><br>
+	
+<div>
+<table>
+<tbody><tr>
+<td>User Id </td>
+<td><input id="userId" type="text"></td>
+</tr>
+<tr>
+<td>Org</td>
+<!-- <td> <input id="org" type="text"></td> -->
+<td> <select id="org" >
+<option value="Org1">org1</option>
+<option value="Org2">org2</option>
+</select>
+</td>
+</tr>
+</tbody></table>
+<input value="Load User" onclick="loadUser()" type="button">
+<p id="userTransactionId"></p>
+</div>
+
+	<script type="text/javascript">
+
+	var openBigBrac="["
+	var closeBigBarc="]"
+	var wspaceType;
+	var openBrac="{"
+	var closeBarc="}"
+	var colon=":"
+	var quote="\""
+	var coma=","
+	var furnCount =2;
+	var ipcount=2;
+	var telecount=2;
+	var switchcount=2;
+
+	function loadUser(){
+		
+		var xhttp = new XMLHttpRequest();
+		var userId=document.getElementById("userId").value
+		var org=document.getElementById("org").value
+		xhttp.onreadystatechange = function() {
+			var message=JSON.parse(this.responseText);
+			localStorage.setItem("token", message["token"]);
+		};
+		
+		xhttp.open("POST", "http://localhost:4000/users", true);
+		xhttp.setRequestHeader('Content-type',
+				'application/x-www-form-urlencoded');
+		xhttp.send("orgName=" + org + "&username=" + userId
+				+ "&role=user&secret=\"\"" );
+	}
+	function createWsPace() {
+			//send another request
+		var physlocstr=getphylocstr()
+		var furnstr=getfurnstr()
+		var switchstr=getswitchstr()
+		var ipstr=getIpStr()
+		var telestr=getTeleStr()
+		var portstr=openBrac+ipstr+coma+telestr+closeBarc
+		 var xhr = new XMLHttpRequest();
+			xhr
+					.open(
+							"POST",
+							"http://localhost:4000/channels/mychannel/chaincodes/dtwin",
+							true);
+			var obj = {
+					 "targets":{
+						    "set1":{"org":"org1","peers":["peer2","peer1"]}
+						  },
+				"fcn" : "newWorkSpace",
+				"args" : [ wspaceType,physlocstr,furnstr,switchstr,portstr]
+			}
+			var data = JSON.stringify(obj);
+
+			xhr.setRequestHeader("Content-Type", "application/json");
+			xhr.setRequestHeader('Authorization', 'Bearer '
+					+ localStorage.getItem("token"));
+			xhr.send(data)
+			xhr.onreadystatechange = function() {
+				document.getElementById("userTransactionId").innerHTML = 
+"transaction Id: "
+						+ xhr.responseText;
+
+			};
+	}
+	
+
+//============telestr-----------
+function getTeleStr(){
+	var telestr=document.getElementById("teleport1").value
+	telestr="\"telePorts\":{\"telePhoneNo\":\""+telestr+"\"}"
+	return telestr
+
+}
+//--------------ipstr--------------
+function getIpStr(){
+	var table=document.getElementById("IpportTable")
+	var ipstr=""
+	for (var i = 1; i <= table.rows.length-1; i++) {
+		ipport=document.getElementById("ipports"+i.toString()).value
+		
+ipstr=ipstr+openBrac+quote+"ipportNo"+quote+colon+quote+ipport+quote+closeBarc
+
+
+
+
+		if(i!=table.rows.length-1){
+			ipstr=ipstr+coma
+		}
+	}
+	ipstr="\"ipports\":["+ipstr+closeBigBarc
+	return ipstr
+}
+
+//------------------switchstr-----------
+
+function getswitchstr(){
+	var table=document.getElementById("switchTable")
+	var switchstr=""
+	for (var i = 1; i <= table.rows.length-1; i++) {
+		switchId=document.getElementById("switchId"+i.toString()).value
+		assigto=document.getElementById("assignTo"+i.toString()).value
+		status=document.getElementById("status"+i.toString()).value
+		
+	switchstr=switchstr+openBigBrac+quote+switchId+quote+coma+quote+assigto+quote+coma+quote+status+quote+closeBigBarc
+
+
+
+
+		if(i!=table.rows.length-1){
+			switchstr=switchstr+coma
+		}
+	}
+	switchstr=openBigBrac+switchstr+closeBigBarc
+	return switchstr
+}
+
+
+
+//=======================furn string--------------
+
+function getfurnstr(){
+	var table=document.getElementById("furnTable")
+	var furnstr=""
+	for (var i = 1; i <= table.rows.length-1; i++) {
+		fname=document.getElementById("fname"+i.toString()).value
+		fquantity=document.getElementById("fquantity"+i.toString()).value
+		furnstr=furnstr+openBrac+quote+"fname"+quote+
+		colon+quote+ fname 
++quote+coma+quote+"quantity"+quote+colon+quote+fquantity+quote+closeBarc
+		if(i!=table.rows.length-1){
+			furnstr=furnstr+coma
+		}
+	}
+	furnstr="["+furnstr+"]"
+	return furnstr
+}
+
+
+
+	//==================================workspace type---=============
+
+
+	function settype(wsType){
+		wspaceType=wsType;
+	}
+	
+//------------------delete row---------------
+function deleteRow(tableID) {
+	var rowCount 	
+	if(tableID=="furnTable"){
+		rowCount=furnCount
+	}else if (tableID=="IpportTable") {
+		rowCount=ipcount
+	} else if (tableID=="teleportTable") {
+		rowCount=telecount
+	} else if(tableID=="switchTable"){
+		rowCount=switchcount
+	}
+	try {
+	var table = document.getElementById(tableID);
+
+			if(rowCount>1){
+				rowCount--
+				table.deleteRow(rowCount);
+			}
+			
+	}catch(e) {
+		alert(e);
+	}
+	if(tableID=="furnTable"){
+			furnCount =rowCount;
+		}else if (tableID=="IpportTable") {
+			ipcount=rowCount;
+		}else if (tableID=="teleportTable") {
+			telecount=rowCount
+		}else if(tableID=="switchTable"){
+			switchcount=rowCount;
+		}
+}
+		//{\"fname\":\"chairs\",\"quantity\":\"2\"}
+		function parseVal(tableId){
+			var table=document.getElementById(tableId);
+			var arr;
+			var str="{"
+			var openBrac="{"
+			var closeBarc="}"
+			var colon=":"
+			var qoute="\""
+			var coma=","
+				
+			for (var i = 0;i<table.rows.length; i++) {
+				   
+				   arr=document.getElementById("s"+i).value
+					str=str+qoute+arr+qoute+colon+qoute+arr+qoute+coma
+				   
+				}
+		str=str+"}"
+		alert(str)
+		}
+//------------------delete row end
+
+
+
+
+
+
+
+//=====================add row=========
+	function addRow(tableID) {
+		var rowCount
+		var cid=[];
+		var table = document.getElementById(tableID);
+		var row = table.insertRow(rowCount);
+		if(tableID=="furnTable"){
+			
+			cid.push("fname")
+			cid.push("fquantity")
+			rowCount=furnCount
+
+		}else if (tableID=="IpportTable") {
+			cid.push("ipports")
+			rowCount=ipcount
+
+		} else if (tableID=="teleportTable") {
+			cid.push("teleport")
+			rowCount=telecount
+		} else if(tableID=="switchTable"){
+			cid.push("switchId")
+			cid.push("assignTo")
+			cid.push("status")
+			rowCount=switchcount
+		}
+		for (var i = 0; i < cid.length; i++) {
+			var cell = row.insertCell(i);
+			var element = document.createElement("input");
+			element.type = "text";
+			element.id=cid[i]+rowCount
+			cell.appendChild(element)
+		};
+		rowCount++
+
+		if(tableID=="furnTable"){
+			furnCount =rowCount;
+		}else if (tableID=="IpportTable") {
+			ipcount=rowCount;
+		}else if (tableID=="teleportTable") {
+			telecount=rowCount
+		}else if(tableID=="switchTable"){
+			switchcount=rowCount;
+		}
+
+
+		}
+
+
+	//===============================submit-------------
+	//------------------------------submit ends--------------	
+	
+
+
+	//------------------------------physicalloaction---------------
+	function getphylocstr(){
+		var country=document.getElementById("country").value;
+		var city=document.getElementById("city").value;
+		var BuildingName=document.getElementById("BuildingName").value;
+		var floor=document.getElementById("floor").value;
+		var wing=document.getElementById("wing").value;
+		var wspaceName=document.getElementById("wspaceName").value;
+		var phystr=""+openBrac+quote+"country"+quote+colon+quote+country+quote+coma+quote+"city"+quote+
+		colon+quote+city+quote+coma+quote+"buildingName"+quote+colon+quote+BuildingName+quote+coma+quote+"floor"+quote+colon+quote+floor+quote+coma+quote+"wing"+quote+colon+quote+wing+quote+coma+quote+"wspaceName"+quote+colon+quote+wspaceName+quote+closeBarc
+		// alert(phystr)
+		return phystr
+
+	}
+	//-------------------------------physical location ends---------
+	//-------------------------
+	
+	
+	</script>
+
+
+</body></html>

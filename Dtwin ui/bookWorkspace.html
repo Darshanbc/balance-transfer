@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Book_workspace.html</title></head><body>
+<meta charset="utf-8">
+<h2>Blockchain Demo</h2>
+
+<!--=================================-create User================================= -->
+<div style="float:left; width:35%">
+    <div>
+     <table>
+      <tbody><tr>
+        <th>Book Workspace</th>
+        
+      </tr>
+
+      
+
+     				<tr>
+						<td>Country</td>
+						<td><input id="country" type="Text"></td>
+					</tr>
+
+					<tr>
+						<td>City</td>
+						<td><input id="city" type="Text"></td>
+					</tr>
+
+					<tr>
+						<td>Building Name</td>
+						<td><input id="BuildingName" type="text"></td>
+					</tr>
+
+					<tr>
+						<td>Floor</td>
+						<td><input id="floor" type="Text"></td>
+					</tr>
+
+
+					<tr>
+						<td>Wing</td>
+						<td><input id="wing" type="Text"></td>
+					</tr>
+
+					<tr>
+						<td>Workspace-Name</td>
+						<td><input id="wspaceName" type="Text"></td>
+					</tr>
+      <tr>
+						<td>Start Time</td>
+						<td>dd<input id="Sdd" style="width: 25px;" type="Text">mm<input id="Smm" style="width: 25px;" type="Text">yyyy<input id="Syyyy" style="width: 33px;" type="Text">hr<input id="Shr" style="width: 25px;" type="Text">min<input id="Smin" style="width: 25px;" type="Text"></td>
+					</tr>
+      <tr>
+						<td>End Time</td>
+						<td>dd<input id="Edd" style="width: 25px;" type="Text">mm<input id="Emm" style="width: 25px;" type="Text">yyyy<input id="Eyyyy" style="width: 33px;" type="Text">hr<input id="Ehr" style="width: 25px;" type="Text">min<input id="Emin" style="width: 25px;" type="Text"></td>
+					</tr>
+      
+      
+      <tr>
+        <td><button type="button" onclick="myFunction()">Book Workspace</button>
+    </td>
+        
+      </tr>
+    </tbody></table>
+    </div>
+    <p id="enrollUser"></p> 
+
+    <p id="userTransactionId"></p> 
+    
+    <table>
+    <tr>
+						<td>UserId</td>
+						<td><input id="userId" type="Text"></td>
+					</tr>
+
+					<tr>
+						<td>Org</td>
+						<td> 
+							<select id="org" >
+							<option value="Org1">org1</option>
+							<option value="Org2">org2</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						
+						<td><input value="Load User" id="org" type="button" onclick="another()"></td>
+					</tr></table>
+    
+    <!--=================================create User end=================================- -->
+
+   
+<!-- =================================Map car Ends================================= -->
+
+<p id="userTransactionId"></p>
+ 
+<script>
+	var openBigBrac="["
+	var closeBigBarc="]"
+	var wspaceType;
+	var openflBrac="{"
+	var closeflBarc="}"
+	var colon=":"
+	var quote="\""
+	var coma=","
+function myFunction() {
+	var country=document.getElementById("country").value;
+	var city=document.getElementById("city").value;
+	var BuildingName=document.getElementById("BuildingName").value;
+	var floor=document.getElementById("floor").value;
+	var wing=document.getElementById("wing").value;
+	var wspaceName=document.getElementById("wspaceName").value;
+	var sdd=document.getElementById("Sdd").value;
+	var smm=document.getElementById("Smm").value;
+	var syyyy=document.getElementById("Syyyy").value;
+	var shr=document.getElementById("Shr").value;
+	var smin=document.getElementById("Smin").value;
+	var org=document.getElementById("org").value
+	var Edd=document.getElementById("Edd").value;
+	var Emm=document.getElementById("Emm").value;
+	var Eyyyy=document.getElementById("Eyyyy").value;
+	var Ehr=document.getElementById("Ehr").value;
+	var Emin=document.getElementById("Emin").value;
+
+
+	var phystr=""+openBigBrac+quote+country+quote+coma+quote+city+quote+coma+quote+BuildingName+quote+coma+quote+floor+quote+coma+quote+wing+quote+coma+
+	quote+wspaceName+quote+closeBigBarc
+//	var startDate = new Date.parse(syyyy+"-"+smm+"-"+sdd+"T"+shr+":"+smin+":00");
+    var istartDate= sdd+"/"+smm+"/"+syyyy+" "+shr+":"+smin//today
+    var iEndDate = Edd+"/"+Emm+"/"+Eyyyy+" "+Ehr+":"+Emin//parseInt(EndDate.getTime());//tom
+    //var icurDate= parseInt(curDate.getTime());
+    //alert("startDate"+istartDate+"endTime"+iEndDate)
+    //alert("CurrentDate"+icurDate+"StartDate"+istartDate)
+      //	var time=""+openflBrac+quote+"startTime"+quote+colon+istartDate+coma+quote+"endTime"+quote+colon+iEndDate+closeflBarc
+ 	var xhr = new XMLHttpRequest();
+		
+
+	//send another request
+		xhr.open("POST", "http://localhost:4000/channels/mychannel/chaincodes/dtwin", true);
+		var obj={	
+				"targets":{
+				    "set1":{"org":org,"peers":["peer2","peer1"]}
+				  },
+				"fcn":"bookWorkSpace",
+				"args":[phystr],
+				"StartTime":istartDate,
+				"EndTime":iEndDate
+			}
+		var data=JSON.stringify(obj);
+
+		xhr.setRequestHeader("Content-Type", "application/json");
+		xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem("token"));
+		xhr.send(data)
+		xhr.onreadystatechange = function() {  
+			document.getElementById("userTransactionId").innerHTML ="Transaction Id: "+xhr.responseText;
+
+		};
+	
+
+}
+	function another(){
+		var xhttp = new XMLHttpRequest();
+		var userId=document.getElementById("userId").value
+		var org=document.getElementById("org").value
+		xhttp.onreadystatechange = function() {
+			var message=JSON.parse(this.responseText);
+			localStorage.setItem("token", message["token"]);
+		};
+		
+		xhttp.open("POST", "http://localhost:4000/users", true);
+		xhttp.setRequestHeader('Content-type',
+				'application/x-www-form-urlencoded');
+		xhttp.send("orgName=" + org + "&username=" + userId
+				+ "&role=user&secret=\"\"" );
+	}
+</script>
+
+</div></body></html>

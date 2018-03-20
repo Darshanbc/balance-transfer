@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html>
+  <title>Network_config.html</title>
+  <head>
+<style>
+div.relative {
+	position: relative;
+	top: 0px;
+	left: 0px;
+	border: 3px solid #73AD21;
+}
+
+td {
+
+}
+
+input[type="text"] {
+	width: 100%;
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+}
+
+#wrap {
+	width: 230px;
+	height: 220px;
+}
+
+#div1 {
+	display: inline-block;
+	position: absolute;
+	padding: 0px;
+	margin: 0px;
+	transition: height .5s, width .5s;
+	z-index: 1;
+		border: 1px solid black;
+}
+
+#div1:Hover {
+	width: 200px;
+	height: 200px;
+}
+
+#div2 {
+	display: inline-block;
+	position: absolute;
+	padding: 0px;
+	margin: 0px;
+		border: 1px solid black;
+}
+
+#div3 {
+	display: inline-block;
+	position: absolute;
+	padding: 0px;
+	margin: 0px;
+		border: 1px solid black;
+}
+
+#div4 {
+	display: inline-block;
+	position: absolute;
+	padding: 0px;
+	margin: 0px;
+		border: 1px solid black;
+}
+</style>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+</head>
+<body>
+	<meta charset="utf-8">
+	<h2 style="height: 30px;">Organisation Configuration</h2>
+	
+
+
+	<div id="wrap" style="width: 500px; height: 500px;">
+		<div id="div1" style="width: 450px;  top: 150px;height: 300px;">
+			<p></p>
+			<table>
+				<tbody>
+					<tr>
+						<th>Network Configuration</th>
+					</tr>
+
+					<tr>
+						<td>Gateway</td>
+						<td><input id="gateway" type="Text"></td>
+					</tr>
+
+					<tr>
+						<td>Netmask</td>
+						<td><input id="netmask" type="Text"></td>
+					</tr>
+
+					<tr>
+						<td>Primary DNS</td>
+						<td><input id="dnsPrimary" type="text"></td>
+					</tr>
+
+					<tr>
+						<td>Secondary DNS</td>
+						<td><input id="dnsSecondary" type="Text"></td>
+					</tr>
+
+
+					
+
+				</tbody>
+			</table>
+			<p></p>
+		</div>
+
+
+		<div id="div2" style="height: 300px; left: 480px; top: 150px; width: 450px;">
+			<h4>Restricted IPs</h4>
+
+			<table id="rip" style="table-layout: fixed" width="250">
+				<tbody>
+					<tr>
+						<td style="width: 80px;" width="">List of IP</td>
+					
+					</tr>
+					<tr>
+						<td><input id="rip1" type="text"></td>
+						
+					</tr>
+				</tbody>
+			</table>
+			<input value="Add Row" onclick="addRow('rip')" type="button">
+
+			<input value="Delete Row" onclick="deleteRow('rip')" type="button">
+		</div>
+		<div id="div3" style="width: 450px; height: 300px; top: 460px;">
+			<p></p>
+			<h4>Restricted Sites</h4>
+			<table id="rsit" style="table-layout: fixed" width="250">
+				<thead></thead>
+				<tbody>
+					<tr>
+						<td style="width: 150px;" width="">List of sites</td>
+						
+					</tr>
+					<tr>
+						<td><input id="rsit1" type="text"></td>
+						
+					</tr>
+				</tbody>
+			</table>
+			<input value="Add Row" onclick="addRow('rsit')" type="button">
+
+			<input value="Delete Row" onclick="deleteRow('rsit')" type="button">
+		</div>
+		<div id="div4" style="top: 460px; width: 450px; height: 300px; left: 480px;">
+	
+			<p>Allowed Sites</p>
+			<div style="width: 200px; position: absolute">
+				<table id="alsit" style="table-layout: fixed">
+					<thead></thead>
+					<tbody>
+						<tr>
+							<td  width="">List of sites</td>
+						</tr>
+						<tr>
+							<td><input id="alsit1" type="text"></td>
+						</tr>
+					</tbody>
+				</table>
+				<input value="Add Row" onclick="addRow('alsit')" type="button">
+
+				<input value="Delete Row" onclick="deleteRow('alsit')" type="button">
+			</div>
+			<div style="width: 200px; position: absolute; left: 190px">
+				
+
+			
+			</div>
+		</div>
+	</div>
+
+
+	<div style="width: 413px"></div>
+<br>
+<br><br><br><br><br><br><br><br><br><br><input value="Submit" onclick="createConfig()" type="button"><br><br>
+	
+<div>
+<table>
+<tbody><tr>
+<td>User Id </td>
+<td><input id="userId" type="text"></td>
+</tr>
+<tr>
+<td>Org</td>
+<td> 
+	<select id="org" >
+	<option value="Org1">org1</option>
+	<option value="Org2">org2</option>
+	</select>
+</td>
+
+</tr>
+</tbody></table>
+<input value="Load User" onclick="loadUser()" type="button">
+<p id="userTransactionId"></p>
+</div>
+
+	<script type="text/javascript">
+
+	var openBigBrac="["
+	var closeBigBarc="]"
+	var wspaceType;
+	var openBrac="{"
+	var closeBarc="}"
+	var colon=":"
+	var quote="\""
+	var coma=","
+	var furnCount =2;
+	var ipcount=2;
+	var telecount=2;
+	var switchcount=2;
+
+	function loadUser(){
+		
+		var xhttp = new XMLHttpRequest();
+		var userId=document.getElementById("userId").value
+		var org=document.getElementById("org").value
+		xhttp.onreadystatechange = function() {
+			var message=JSON.parse(this.responseText);
+			localStorage.setItem("token", message["token"]);
+		};
+		
+		xhttp.open("POST", "http://localhost:4000/users", true);
+		xhttp.setRequestHeader('Content-type',
+				'application/x-www-form-urlencoded');
+		xhttp.send("orgName=" + org + "&username=" + userId
+				+ "&role=user&secret=\"\"" );
+	}
+	function createConfig() {
+			//send createConfig request
+		var gateway=document.getElementById("gateway").value
+		var netmask=document.getElementById("netmask").value
+		var primaryDns=document.getElementById("dnsPrimary").value
+		var SecondaryDns=document.getElementById("dnsSecondary").value
+		var org=document.getElementById("org").value
+		var rip=getrip()
+		var rsit=getrsitr()
+		var allsit=getalsit()
+		var finalstr=openBrac+quote+"gateway"+quote+colon+ quote +gateway+ quote +coma+quote+"netMask"+quote+colon+ quote +netmask+ quote+coma+quote+"DNS_Primary"+quote+colon+quote+primaryDns+quote+coma+quote+"DNS_Secondary"+quote+colon+quote+SecondaryDns+quote+coma+rip+coma+rsit+coma+allsit+closeBarc
+
+		 var xhr = new XMLHttpRequest();
+			xhr
+					.open(
+							"POST",
+							"http://localhost:4000/channels/mychannel/chaincodes/dtwin",
+							true);
+			var obj = {
+					 "targets":{
+						    "set1":{"org":org,"peers":["peer2","peer1"]}
+						  },
+				"fcn" : "createConfig",
+				"args" : [finalstr]
+			}
+			var data = JSON.stringify(obj);
+
+			xhr.setRequestHeader("Content-Type", "application/json");
+			xhr.setRequestHeader('Authorization', 'Bearer '
+					+ localStorage.getItem("token"));
+			xhr.send(data)
+			xhr.onreadystatechange = function() {
+				document.getElementById("userTransactionId").innerHTML = 
+"transaction Id: "
+						+ xhr.responseText;
+
+			};
+	}
+	
+
+//============telestr-----------
+function getrsitr(){
+	var table=document.getElementById("rsit")
+
+	var rsitstr=""
+	for (var i = 1; i <= table.rows.length-1; i++) {
+		rsit=document.getElementById("rsit"+i.toString()).value
+		
+		rsitstr=rsitstr+quote+rsit+quote
+
+
+		if(i!=table.rows.length-1){
+			rsitstr=rsitstr+coma
+		}
+	}
+	rsitstr="\"blackList\":["+rsitstr+closeBigBarc
+	return rsitstr
+
+}
+//--------------ipstr--------------
+function getrip(){
+	var table=document.getElementById("rip")
+	var ripstr=""
+	for (var i = 1; i <= table.rows.length-1; i++) {
+		rip=document.getElementById("rip"+i.toString()).value
+		
+		ripstr=ripstr+quote+rip+quote
+
+
+		if(i!=table.rows.length-1){
+			ripstr=ripstr+coma
+		}
+	}
+	ripstr="\"restrictedIP\":["+ripstr+closeBigBarc
+	//alert(ripstr)
+	return ripstr
+}
+
+//------------------switchstr-----------
+
+
+
+
+//=======================furn string--------------
+
+function getalsit(){
+	var table=document.getElementById("alsit")
+	var alsitstr=""
+	for (var i = 1; i <= table.rows.length-1; i++) {
+		alsit=document.getElementById("alsit"+i.toString()).value
+		
+		alsitstr=alsitstr+quote+alsit+quote
+		if(i!=table.rows.length-1){
+			alsitstr=alsitstr+coma
+		}
+	}
+	alsitstr="\"whiteList\":["+alsitstr+closeBigBarc
+	
+	return alsitstr
+}
+
+
+
+	//==================================workspace type---=============
+
+
+	function settype(wsType){
+		wspaceType=wsType;
+	}
+	
+//------------------delete row---------------
+function deleteRow(tableID) {
+	var rowCount 	
+	if(tableID=="rsit"){
+		rowCount=furnCount
+	}else if (tableID=="IpportTable") {
+		rowCount=ipcount
+	} else if (tableID=="alsit") {
+		rowCount=telecount
+	} else if(tableID=="rip"){
+		rowCount=switchcount
+	}
+	try {
+	var table = document.getElementById(tableID);
+
+			if(rowCount>1){
+				rowCount--
+				table.deleteRow(rowCount);
+			}
+			
+	}catch(e) {
+		alert(e);
+	}
+	if(tableID=="rsit"){
+			furnCount =rowCount;
+		}else if (tableID=="IpportTable") {
+			ipcount=rowCount;
+		}else if (tableID=="alsit") {
+			telecount=rowCount
+		}else if(tableID=="rip"){
+			switchcount=rowCount;
+		}
+}
+		//{\"fname\":\"chairs\",\"quantity\":\"2\"}
+		function parseVal(tableId){
+			var table=document.getElementById(tableId);
+			var arr;
+			var str="{"
+			var openBrac="{"
+			var closeBarc="}"
+			var colon=":"
+			var quote="\""
+			var coma=","
+				
+			for (var i = 0;i<table.rows.length; i++) {
+				   
+				   arr=document.getElementById("s"+i).value
+					str=str+quote+arr+quote+colon+quote+arr+quote+coma
+				   
+				}
+		str=str+"}"
+		alert(str)
+		}
+//------------------delete row end
+
+
+
+
+
+
+
+//=====================add row=========
+	function addRow(tableID) {
+		var rowCount
+		var cid=[];
+		var table = document.getElementById(tableID);
+		var row = table.insertRow(rowCount);
+		if(tableID=="rsit"){
+			cid.push("rsit")
+			rowCount=furnCount
+
+		} else if (tableID=="alsit") {
+			cid.push("alsit")
+			rowCount=telecount
+		} else if(tableID=="rip"){
+		
+			cid.push("rip")
+			rowCount=switchcount
+		}
+		for (var i = 0; i < cid.length; i++) {
+			var cell = row.insertCell(i);
+			var element = document.createElement("input");
+			element.type = "text";
+			element.id=cid[i]+rowCount
+			cell.appendChild(element)
+		};
+		rowCount++
+
+		if(tableID=="rsit"){
+			furnCount =rowCount;
+		}else if (tableID=="IpportTable") {
+			ipcount=rowCount;
+		}else if (tableID=="alsit") {
+			telecount=rowCount
+		}else if(tableID=="rip"){
+			switchcount=rowCount;
+		}
+
+
+		}
+
+
+	//===============================submit-------------
+	//------------------------------submit ends--------------	
+	
+
+
+	//------------------------------physicalloaction---------------
+	function getphylocstr(){
+		var country=document.getElementById("country").value;
+		var city=document.getElementById("city").value;
+		var BuildingName=document.getElementById("BuildingName").value;
+		var floor=document.getElementById("floor").value;
+		var wing=document.getElementById("wing").value;
+		var wspaceName=document.getElementById("wspaceName").value;
+		var phystr=""+openBrac+quote+"country"+quote+colon+quote+country+quote+coma+quote+"city"+quote+
+		colon+quote+city+quote+coma+quote+"buildingName"+quote+colon+quote+BuildingName+quote+coma+quote+"floor"+quote+colon+quote+floor+quote+coma+quote+"wing"+quote+colon+quote+wing+quote+coma+quote+"wspaceName"+quote+colon+quote+wspaceName+quote+closeBarc
+		// alert(phystr)
+		return phystr
+
+	}
+	//-------------------------------physical location ends---------
+	//-------------------------
+	
+	
+	</script>
+
+
+</body></html>

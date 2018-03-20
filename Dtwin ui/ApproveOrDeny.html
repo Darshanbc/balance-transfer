@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Approve/deny.html</title>
+  </head><body>
+<meta charset="utf-8">
+<h2>Blockchain Demo</h2>
+
+<!--=================================-create User================================= -->
+<div style="float:left; width:35%">
+    <div>
+     <table>
+      <tbody style="height: 120px;width: 500px;"><tr>
+        <th>Review Request</th>
+        
+      </tr>
+      <tr>
+        <td>Transaction Id</td>
+        <td style="width: 450px;"><input id="TxId" value="" style="width: 530px;" type="Text"></td><td>
+
+      </td></tr>
+      <tr>
+        <td>Permission</td>
+        <td><input name="permission" onclick="settype(this.value)" value="yes" checked="checked" type="radio">Approve<input name="permission" onclick="settype(this.value)" value="no" type="radio">Deny</td><td>
+
+      </td></tr>
+      
+      <tr>
+        <td><button type="button" onclick="ApproveOrDeny()">Approve/Deny</button>
+    </td>
+        
+      </tr>
+    </tbody></table>
+    </div>
+    <div>
+<table>
+</br>
+</br>
+<tbody><tr>
+<td>User Id </td>
+<td><input id="userId" value="" type="text"></td>
+</tr>
+<!-- <tr>
+<td>Org</td>
+<td> <input id="org" value="" type="text"></td>
+</tr> -->
+<tr>
+<td>Org</td>
+<td> <select id="org" >
+<option value="Org1">org1</option>
+<option value="Org2">org2</option>
+</select>
+</td>
+</tr>
+</tbody></table>
+<input value="Load User" onclick="loadUser()" type="button">
+<p id="message"></p>
+<p id="userTransactionId"></p>
+</div>
+  
+
+ 
+<script>
+ var permission;
+ 
+  function settype(permit){
+    permission=permit;
+  }
+//---------------------------------Create User--------------------
+function ApproveOrDeny() {
+ var TxId=document.getElementById("TxId").value;
+   var org=document.getElementById("org").value
+  
+   var 
+uri="http://localhost:4000/channels/mychannel/chaincodes/dtwin/"+TxId+"?permission="+permission+"&targets=%7B%0A%22set1%22%3A%7B%22org%22%3A%22"+org+"%22%2C%22peers%22%3A%5B%22peer2%22%2C%22peer1%22%5D%7D%0A%20%20%7D&peer=peer0."+org.toLowerCase()+".example.com&fcn=ApproveOrDeny"
+
+   var xhr = new XMLHttpRequest();
+   xhr.onreadystatechange = function() {  
+      var message=JSON.parse(this.responseText);
+      document.getElementById("userTransactionId").innerHTML = "Transaction Id :"+message.Transaction_Id//this.responseText;
+      document.getElementById("message").innerHTML = "Status :"+message.message
+    }
+   xhr.open("GET", uri, true);
+   xhr.setRequestHeader("Content-Type", "application/json");
+   xhr.setRequestHeader('Authorization', 'Bearer ' + 
+   localStorage.getItem("token"));
+   xhr.send();
+    
+}
+
+
+function loadUser(){
+    var xhttp = new XMLHttpRequest();
+    var userId=document.getElementById("userId").value
+    var org=document.getElementById("org").value
+    xhttp.onreadystatechange = function() {
+      var message=JSON.parse(this.responseText);
+      localStorage.setItem("token", message["token"]);
+    };
+    
+    xhttp.open("POST", "http://localhost:4000/users", true);
+    xhttp.setRequestHeader('Content-type',
+        'application/x-www-form-urlencoded');
+    xhttp.send("orgName=" + org + "&username=" + userId
+        + "&role=user&secret=\"\"" );
+  }
+//-------------------------------Create User ends---------------------------------
+
+</script>
+
+</div></body></html>
